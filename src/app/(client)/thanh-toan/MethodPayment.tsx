@@ -3,6 +3,8 @@ import { Modal, Space, Tooltip, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import api from '@/app/services/axiosService';
 import { SocialLink } from '@/components/SocialButton';
+import { ISystem } from '@/app/interfaces/ISystem';
+import Image from 'next/image';
 
 const { Title } = Typography;
 
@@ -64,12 +66,13 @@ const PhoneIcon = () => (
 );
 export default function MethodPayment({ visible, onClose }: MethodPaymentProps) {
     const [socialLinks, setSocialLinks] = useState<SocialLink[]>([]);
-   
+    const [data, setData] = useState<ISystem | undefined>(undefined);
     useEffect(() => {
         const fetchSystemData = async () => {
             try {
                 const response = await api.get('/clients/systems');
                 const data = response.data.system;
+                setData(data)
 
                 const links: SocialLink[] = [];
 
@@ -77,7 +80,7 @@ export default function MethodPayment({ visible, onClose }: MethodPaymentProps) 
                     links.push({
                         name: 'Facebook',
                         url: data.facebook,
-                        icon: <FacebookIcon/>,
+                        icon: <FacebookIcon />,
                         bgColor: 'bg-gradient-to-br from-blue-500 to-indigo-600',
                         hoverColor: 'hover:from-blue-600 hover:to-indigo-700',
                     });
@@ -125,15 +128,25 @@ export default function MethodPayment({ visible, onClose }: MethodPaymentProps) 
             centered
             title={<Title level={4} className="text-center">Chọn phương thức thanh toán</Title>}
         >
-            <Space size="large" className="flex justify-center text-3xl mt-4">
-            {socialLinks.map((social, index) => (
-               <Tooltip title={social.name} color='blue'  key={index}>
-                 <div key={index} className="relative group">
-                    <a
-                        href={social.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`
+            <div>
+                {data && data.qr_code && (
+                        <Image
+                            height={300}
+                            width={300}
+                            src={data.qr_code}
+                            alt={'QR Code'}
+                            className='m-auto'
+                        />
+                )}
+                <Space size="large" className="flex justify-center text-3xl mt-4">
+                    {socialLinks.map((social, index) => (
+                        <Tooltip title={social.name} color='blue' key={index}>
+                            <div key={index} className="relative group">
+                                <a
+                                    href={social.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className={`
                             block
                             w-12
                             h-12
@@ -152,27 +165,27 @@ export default function MethodPayment({ visible, onClose }: MethodPaymentProps) 
                             relative
                             overflow-hidden
                         `}
-                        style={{ animationDelay: `${index * 0.2}s` }}
-                    >
-                        {/* Hiệu ứng ánh sáng khi hover */}
-                        <span className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transform skew-x-12 transition-opacity duration-300" />
+                                    style={{ animationDelay: `${index * 0.2}s` }}
+                                >
+                                    {/* Hiệu ứng ánh sáng khi hover */}
+                                    <span className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transform skew-x-12 transition-opacity duration-300" />
 
-                        {/* Biểu tượng SVG */}
-                        <div className="text-white transform group-hover:scale-110 transition-transform duration-300">
-                            {social.icon}
-                        </div>
+                                    {/* Biểu tượng SVG */}
+                                    <div className="text-white transform group-hover:scale-110 transition-transform duration-300">
+                                        {social.icon}
+                                    </div>
 
-                        {/* Hiệu ứng pulse */}
-                        <span
-                            className="absolute inset-0 rounded-full border-2 border-white opacity-20 scale-125 animate-[pulse_2s_infinite]"
-                            style={{ animationDelay: `${index * 0.4}s` }}
-                        />
-                    </a>
+                                    {/* Hiệu ứng pulse */}
+                                    <span
+                                        className="absolute inset-0 rounded-full border-2 border-white opacity-20 scale-125 animate-[pulse_2s_infinite]"
+                                        style={{ animationDelay: `${index * 0.4}s` }}
+                                    />
+                                </a>
 
-                    {/* Tooltip cho Zalo */}
-                    {social.name === 'Zalo' && social.phone && (
-                        <div
-                            className={`
+                                {/* Tooltip cho Zalo */}
+                                {social.name === 'Zalo' && social.phone && (
+                                    <div
+                                        className={`
                                 top-1/2
                                 -translate-y-1/2
                                 bg-gray-800
@@ -190,15 +203,16 @@ export default function MethodPayment({ visible, onClose }: MethodPaymentProps) 
                                 whitespace-nowrap
                                 shadow-md
                             `}
-                        >
-                            {social.phone}
-                        </div>
-                    )}
-                </div>
-               </Tooltip>
-               
-            ))}
-            </Space>
+                                    >
+                                        {social.phone}
+                                    </div>
+                                )}
+                            </div>
+                        </Tooltip>
+
+                    ))}
+                </Space>
+            </div>
         </Modal>
     );
 }

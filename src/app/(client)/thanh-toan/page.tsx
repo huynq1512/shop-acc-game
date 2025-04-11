@@ -49,7 +49,7 @@ export default function CheckoutPage() {
 
             <Row gutter={[16, 16]}>
                 <Col xs={24} md={16}>
-                    <Card title="Thông tin giao hàng" className="shadow-md">
+                    <Card title="Thông tin khách hàng" className="shadow-md">
                         <Form
                             form={form}
                             layout="vertical"
@@ -75,13 +75,13 @@ export default function CheckoutPage() {
                                 <Input placeholder="Nhập số điện thoại" />
                             </Form.Item>
 
-                            <Form.Item
+                            {/* <Form.Item
                                 label="Địa chỉ"
                                 name="address"
                                 rules={[{ required: true, message: 'Vui lòng nhập địa chỉ!' }]}
                             >
                                 <Input.TextArea rows={3} placeholder="Nhập địa chỉ giao hàng" />
-                            </Form.Item>
+                            </Form.Item> */}
 
                             <Form.Item
                                 label="Email"

@@ -4,6 +4,7 @@ export interface ISystem {
     id: number;
     name: string;
     logo: string | null;
+    qr_code: string | null;
     logo_icon: string | null;
     phone: string;
     email?: string | null;

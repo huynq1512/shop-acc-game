@@ -1,4 +1,4 @@
-import {Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from "typeorm";
 
 @Entity({ name: "systems" })
 export class System {
@@ -10,7 +10,10 @@ export class System {
 
     @Column({ type: "varchar", length: 500 })
     logo!: string;
-
+    
+    @Column({ type: "varchar", length: 500 })
+    qr_code!: string;
+    
     @Column({ type: "varchar", length: 20 })
     phone!: string;
 
